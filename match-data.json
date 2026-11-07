@@ -1,0 +1,107 @@
+{
+  "state": "pause",
+  "period": "1Q",
+  "home": {
+    "acronym": "ITS",
+    "name": "ITSLP Ardillas",
+    "color": "#7A183E",
+    "logo": "/assets/ITSLP/ardilla.png",
+    "score": 0,
+    "players": [
+      {
+        "number": "4",
+        "name": "Carlos Mendoza",
+        "starter": true
+      },
+      {
+        "number": "7",
+        "name": "Diego Ramírez",
+        "starter": true
+      },
+      {
+        "number": "10",
+        "name": "Alejandro Torres",
+        "starter": true
+      },
+      {
+        "number": "12",
+        "name": "Mateo Hernández",
+        "starter": true
+      },
+      {
+        "number": "23",
+        "name": "Javier Morales",
+        "starter": true
+      },
+      {
+        "number": "1",
+        "name": "Luis Fernando Gil",
+        "starter": false
+      },
+      {
+        "number": "8",
+        "name": "Emiliano Castro",
+        "starter": false
+      }
+    ]
+  },
+  "away": {
+    "acronym": "UAS",
+    "name": "UASLP Águilas",
+    "color": "#1D9BF0",
+    "logo": "/assets/UASLP/Aguila.png",
+    "score": 0,
+    "players": [
+      {
+        "number": "5",
+        "name": "Sebastián Gómez",
+        "starter": true
+      },
+      {
+        "number": "9",
+        "name": "Rodrigo Navarro",
+        "starter": true
+      },
+      {
+        "number": "11",
+        "name": "Andrés Delgado",
+        "starter": true
+      },
+      {
+        "number": "14",
+        "name": "Miguel Ángel Ruiz",
+        "starter": true
+      },
+      {
+        "number": "24",
+        "name": "Santiago Flores",
+        "starter": true
+      },
+      {
+        "number": "2",
+        "name": "Leonardo Silva",
+        "starter": false
+      },
+      {
+        "number": "6",
+        "name": "Iván Castillo",
+        "starter": false
+      },
+      {
+        "number": "18",
+        "name": "Jorge Domínguez",
+        "starter": false
+      },
+      {
+        "number": "20",
+        "name": "Pablo Guerrero",
+        "starter": false
+      },
+      {
+        "number": "32",
+        "name": "Héctor Lozano",
+        "starter": false
+      }
+    ]
+  }
+}

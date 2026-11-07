@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TECNM Basket — Panel de Control y Administración</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-base: #090D16;
+      --bg-panel: #111827;
+      --bg-card: #1E293B;
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --home-color: #7A183E;
+      --away-color: #1D9BF0;
+      --accent-green: #10B981;
+      --accent-amber: #F59E0B;
+      --accent-red: #EF4444;
+      --font-display: 'Chakra Petch', system-ui, sans-serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      padding: 24px;
+      line-height: 1.45;
+    }
+
+    .layout {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Top Bar */
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      padding: 16px 24px;
+      border-radius: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--home-color), var(--away-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .brand h1 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .brand p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      font-size: 13px;
+      font-weight: 600;
+      color: #34D399;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+    }
+
+    .btn-link {
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-link:hover {
+      background: rgba(255, 255, 255, 0.13);
+    }
+
+    /* Section Panels */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #E2E8F0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* 1. Big Scene Control Buttons */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .scene-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .scene-btn {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 108px;
+      padding: 18px 14px;
+      border-radius: 14px;
+      background: var(--bg-card);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      scale: 1;
+      transition:
+        scale 0.15s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .scene-btn:hover {
+      background: #263449;
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .scene-btn:active {
+      scale: 0.97;
+    }
+
+    .scene-btn .scene-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .scene-btn .scene-label {
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .scene-btn .scene-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .scene-btn.is-active {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: #10B981;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.28), inset 0 0 12px rgba(16, 185, 129, 0.15);
+    }
+
+    .scene-btn.is-active::after {
+      content: 'EN AIRE';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: #10B981;
+      color: #052E16;
+      letter-spacing: 0.06em;
+    }
+
+    /* 2. Score & Period Controls */
+    .scoreboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 290px 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 980px) {
+      .scoreboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .team-score-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-score-card.home {
+      border-top: 4px solid var(--home-color);
+    }
+
+    .team-score-card.away {
+      border-top: 4px solid var(--away-color);
+    }
+
+    .team-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .team-id {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .team-id img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 6px;
+    }
+
+    .team-id-text .role {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .team-id-text .name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .live-score-val {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px 22px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .score-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .score-btn {
+      height: 58px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #FFFFFF;
+      scale: 1;
+      transition: scale 0.12s ease, filter 0.15s ease;
+    }
+
+    .score-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    .score-btn:active {
+      scale: 0.95;
+    }
+
+    .score-btn.plus-1 {
+      background: #2563EB;
+    }
+    .score-btn.plus-2 {
+      background: #059669;
+    }
+    .score-btn.plus-3 {
+      background: #D97706;
+    }
+    .score-btn.minus-1 {
+      background: #334155;
+      color: #FCA5A5;
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    /* Period Center Box */
+    .period-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .period-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .period-selector {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      width: 100%;
+    }
+
+    .period-btn {
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .period-btn.is-active {
+      background: var(--accent-amber);
+      color: #090D16;
+      border-color: #FDE047;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-next-period {
+      width: 100%;
+      height: 46px;
+      border-radius: 10px;
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #FBBF24;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-next-period:hover {
+      background: rgba(245, 158, 11, 0.26);
+    }
+
+    .btn-reset-scores {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-reset-scores:hover {
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    /* 3. Fast Roster Loader (Carga Rápida de Último Minuto) */
+    .rosters-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .rosters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .roster-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .roster-meta-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 54px;
+      gap: 10px;
+    }
+
+    .input-field {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .input-color {
+      height: 36px;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .roster-textarea {
+      width: 100%;
+      min-height: 230px;
+      background: rgba(9, 13, 22, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 14px;
+      color: #F8FAFC;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.55;
+      resize: vertical;
+    }
+
+    .roster-textarea:focus, .input-field:focus {
+      outline: 2px solid #3B82F6;
+      border-color: transparent;
+    }
+
+    .roster-helper {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .roster-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-save-rosters {
+      padding: 14px 28px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      border: none;
+      color: #052E16;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+      transition: filter 0.15s, scale 0.12s;
+    }
+
+    .btn-save-rosters:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-save-rosters:active {
+      scale: 0.98;
+    }
+
+    .save-toast {
+      font-size: 14px;
+      font-weight: 600;
+      color: #34D399;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .save-toast.is-visible {
+      opacity: 1;
+    }
+
+    /* Stream Deck Reference Footer */
+    .api-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 10px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .api-item {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #CBD5E1;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">🏀</div>
+        <div>
+          <h1>TECNM BASKET • CONTROL DE TRANSMISIÓN</h1>
+          <p>Panel de administración en tiempo real + Respaldo de Elgato Stream Deck</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span id="conn-status">Socket Conectado</span>
+        </div>
+        <a href="/overlay" target="_blank" class="btn-link">Abrir Vista /overlay (1920x1080) ↗</a>
+      </div>
+    </header>
+
+    <!-- 1. Control de Escena -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">🎬 Control de Escena en Vivo (OBS Overlay)</h2>
+      </div>
+      <div class="scene-grid">
+        <button class="scene-btn" data-mode="hidden" onclick="setScene('hidden')">
+          <span class="scene-icon">⬛</span>
+          <span class="scene-label">Ocultar</span>
+          <span class="scene-sub">mode=hidden</span>
+        </button>
+        <button class="scene-btn" data-mode="pause" onclick="setScene('pause')">
+          <span class="scene-icon">⏸️</span>
+          <span class="scene-label">Pantalla Pausa</span>
+          <span class="scene-sub">mode=pause</span>
+        </button>
+        <button class="scene-btn" data-mode="lineup_home" onclick="setScene('lineup_home')">
+          <span class="scene-icon">📋</span>
+          <span class="scene-label">Alineación Local</span>
+          <span class="scene-sub">mode=lineup_home</span>
+        </button>
+        <button class="scene-btn" data-mode="lineup_away" onclick="setScene('lineup_away')">
+          <span class="scene-icon">📋</span>
+          <span class="scene-label">Alineación Visitante</span>
+          <span class="scene-sub">mode=lineup_away</span>
+        </button>
+        <button class="scene-btn" data-mode="scorebug" onclick="setScene('scorebug')">
+          <span class="scene-icon">📺</span>
+          <span class="scene-label">Marcador en Vivo</span>
+          <span class="scene-sub">mode=scorebug</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. Marcador y Periodo -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">⚡ Control de Puntaje y Periodo</h2>
+      </div>
+      <div class="scoreboard-grid">
+        <!-- Local -->
+        <div id="card-home" class="team-score-card home">
+          <div class="team-card-head">
+            <div class="team-id">
+              <img id="ctrl-home-logo" src="/assets/ITSLP/ardilla.png" alt="Local" />
+              <div class="team-id-text">
+                <div class="role">Equipo Local</div>
+                <div id="ctrl-home-name" class="name">ITSLP Ardillas</div>
+              </div>
+            </div>
+            <div id="ctrl-home-score" class="live-score-val">0</div>
+          </div>
+          <div class="score-buttons">
+            <button class="score-btn plus-1" onclick="addScore('home', 1)">+1</button>
+            <button class="score-btn plus-2" onclick="addScore('home', 2)">+2</button>
+            <button class="score-btn plus-3" onclick="addScore('home', 3)">+3</button>
+            <button class="score-btn minus-1" onclick="addScore('home', -1)">-1</button>
+          </div>
+        </div>
+
+        <!-- Periodo -->
+        <div class="period-card">
+          <span class="period-label">Cuarto / Periodo Actual</span>
+          <div class="period-selector">
+            <button class="period-btn" data-period="1Q" onclick="setPeriod('1Q')">1Q</button>
+            <button class="period-btn" data-period="2Q" onclick="setPeriod('2Q')">2Q</button>
+            <button class="period-btn" data-period="3Q" onclick="setPeriod('3Q')">3Q</button>
+            <button class="period-btn" data-period="4Q" onclick="setPeriod('4Q')">4Q</button>
+            <button class="period-btn" data-period="OT" onclick="setPeriod('OT')">OT</button>
+          </div>
+          <button class="btn-next-period" onclick="nextPeriod()">Siguiente Periodo (/api/period/next) ⏭️</button>
+          <button class="btn-reset-scores" onclick="resetScores()">Reiniciar Marcador a 0 - 0</button>
+        </div>
+
+        <!-- Visitante -->
+        <div id="card-away" class="team-score-card away">
+          <div class="team-card-head">
+            <div class="team-id">
+              <img id="ctrl-away-logo" src="/assets/UASLP/Aguila.png" alt="Visitante" />
+              <div class="team-id-text">
+                <div class="role">Equipo Visitante</div>
+                <div id="ctrl-away-name" class="name">UASLP Águilas</div>
+              </div>
+            </div>
+            <div id="ctrl-away-score" class="live-score-val">0</div>
+          </div>
+          <div class="score-buttons">
+            <button class="score-btn plus-1" onclick="addScore('away', 1)">+1</button>
+            <button class="score-btn plus-2" onclick="addScore('away', 2)">+2</button>
+            <button class="score-btn plus-3" onclick="addScore('away', 3)">+3</button>
+            <button class="score-btn minus-1" onclick="addScore('away', -1)">-1</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Carga Rápida de Último Minuto -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">📝 Carga Rápida de Último Minuto (Plantillas e Identidad)</h2>
+      </div>
+
+      <div class="rosters-grid">
+        <!-- Plantilla Local -->
+        <div class="roster-box">
+          <label style="font-weight: 700; font-size: 14px; color: #F8FAFC;">Plantilla Equipo Local (Primeros 5 = Titulares)</label>
+          <div class="roster-meta-row">
+            <input id="input-home-acronym" class="input-field" type="text" maxlength="3" placeholder="Acrónimo" title="Acrónimo (3 letras)" />
+            <input id="input-home-name" class="input-field" type="text" placeholder="Nombre completo del equipo" />
+            <input id="input-home-color" class="input-color" type="color" title="Color del equipo" />
+          </div>
+          <textarea
+            id="textarea-home"
+            class="roster-textarea"
+            placeholder="4 - Carlos Mendoza&#10;7 - Diego Ramírez&#10;10 - Alejandro Torres&#10;12 - Mateo Hernández&#10;23 - Javier Morales&#10;1 - Luis Fernando Gil"
+          ></textarea>
+          <div class="roster-helper">
+            <span>Formato: <code>Número - Nombre</code> (1 jugador por línea)</span>
+            <span id="count-home">0 jugadores</span>
+          </div>
+        </div>
+
+        <!-- Plantilla Visitante -->
+        <div class="roster-box">
+          <label style="font-weight: 700; font-size: 14px; color: #F8FAFC;">Plantilla Equipo Visitante (Primeros 5 = Titulares)</label>
+          <div class="roster-meta-row">
+            <input id="input-away-acronym" class="input-field" type="text" maxlength="3" placeholder="Acrónimo" title="Acrónimo (3 letras)" />
+            <input id="input-away-name" class="input-field" type="text" placeholder="Nombre completo del equipo" />
+            <input id="input-away-color" class="input-color" type="color" title="Color del equipo" />
+          </div>
+          <textarea
+            id="textarea-away"
+            class="roster-textarea"
+            placeholder="5 - Sebastián Gómez&#10;9 - Rodrigo Navarro&#10;11 - Andrés Delgado&#10;14 - Miguel Ángel Ruiz&#10;24 - Santiago Flores&#10;2 - Leonardo Silva"
+          ></textarea>
+          <div class="roster-helper">
+            <span>Formato: <code>Número - Nombre</code> (1 jugador por línea)</span>
+            <span id="count-away">0 jugadores</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="roster-actions">
+        <button id="btn-save-rosters" class="btn-save-rosters" onclick="saveRosters()">
+          💾 Guardar Plantillas (match-data.json)
+        </button>
+        <span id="save-toast" class="save-toast">✔ Plantillas guardadas y sincronizadas en vivo con OBS</span>
+      </div>
+    </section>
+
+    <!-- 4. Referencia Rápida Stream Deck -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">🎛️ Endpoints API REST para Elgato Stream Deck (GET o POST)</h2>
+      </div>
+      <div class="api-list">
+        <div class="api-item"><code>/api/state?mode=hidden|pause|lineup_home|lineup_away|scorebug</code></div>
+        <div class="api-item"><code>/api/score?team=home|away&amp;points=1|2|3|-1</code></div>
+        <div class="api-item"><code>/api/period/next</code></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let initializedTextareas = false;
+
+    const textareaHome = document.getElementById('textarea-home');
+    const textareaAway = document.getElementById('textarea-away');
+
+    function playersToRawText(players = []) {
+      return players.map(p => `${p.number} - ${p.name}`).join('\n');
+    }
+
+    function updateLineCounts() {
+      const homeLines = textareaHome.value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const awayLines = textareaAway.value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+      const homeStarters = Math.min(5, homeLines.length);
+      const homeBench = Math.max(0, homeLines.length - 5);
+      document.getElementById('count-home').textContent =
+        `${homeLines.length} jugadores (${homeStarters} titulares, ${homeBench} banca)`;
+
+      const awayStarters = Math.min(5, awayLines.length);
+      const awayBench = Math.max(0, awayLines.length - 5);
+      document.getElementById('count-away').textContent =
+        `${awayLines.length} jugadores (${awayStarters} titulares, ${awayBench} banca)`;
+    }
+
+    textareaHome.addEventListener('input', updateLineCounts);
+    textareaAway.addEventListener('input', updateLineCounts);
+
+    function syncUIFromData(data, forceTextareas = false) {
+      if (!data) return;
+
+      document.documentElement.style.setProperty('--home-color', data.home.color || '#7A183E');
+      document.documentElement.style.setProperty('--away-color', data.away.color || '#1D9BF0');
+
+      // Scene buttons active indicator
+      document.querySelectorAll('.scene-btn').forEach(btn => {
+        btn.classList.toggle('is-active', btn.dataset.mode === data.state);
+      });
+
+      // Scoreboard cards
+      document.getElementById('ctrl-home-logo').src = data.home.logo;
+      document.getElementById('ctrl-home-name').textContent = `${data.home.acronym} • ${data.home.name}`;
+      document.getElementById('ctrl-home-score').textContent = data.home.score;
+
+      document.getElementById('ctrl-away-logo').src = data.away.logo;
+      document.getElementById('ctrl-away-name').textContent = `${data.away.acronym} • ${data.away.name}`;
+      document.getElementById('ctrl-away-score').textContent = data.away.score;
+
+      // Period buttons
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.classList.toggle('is-active', btn.dataset.period === data.period);
+      });
+
+      // Populate textareas on initial load or when rostersUpdated is broadcast
+      if (!initializedTextareas || forceTextareas) {
+        document.getElementById('input-home-acronym').value = data.home.acronym || '';
+        document.getElementById('input-home-name').value = data.home.name || '';
+        document.getElementById('input-home-color').value = data.home.color || '#7A183E';
+        textareaHome.value = playersToRawText(data.home.players);
+
+        document.getElementById('input-away-acronym').value = data.away.acronym || '';
+        document.getElementById('input-away-name').value = data.away.name || '';
+        document.getElementById('input-away-color').value = data.away.color || '#1D9BF0';
+        textareaAway.value = playersToRawText(data.away.players);
+
+        updateLineCounts();
+        initializedTextareas = true;
+      }
+    }
+
+    // Actions via REST API (also triggers Socket.io broadcast to all clients)
+    async function setScene(mode) {
+      await fetch(`/api/state?mode=${encodeURIComponent(mode)}`, { method: 'POST' });
+    }
+
+    async function addScore(team, points) {
+      await fetch(`/api/score?team=${encodeURIComponent(team)}&points=${encodeURIComponent(points)}`, { method: 'POST' });
+    }
+
+    async function setPeriod(period) {
+      await fetch(`/api/period?period=${encodeURIComponent(period)}`, { method: 'POST' });
+    }
+
+    async function nextPeriod() {
+      await fetch('/api/period/next', { method: 'POST' });
+    }
+
+    async function resetScores() {
+      await fetch('/api/reset-scores', { method: 'POST' });
+    }
+
+    async function saveRosters() {
+      const payload = {
+        homeRaw: textareaHome.value,
+        awayRaw: textareaAway.value,
+        homeMeta: {
+          acronym: document.getElementById('input-home-acronym').value,
+          name: document.getElementById('input-home-name').value,
+          color: document.getElementById('input-home-color').value
+        },
+        awayMeta: {
+          acronym: document.getElementById('input-away-acronym').value,
+          name: document.getElementById('input-away-name').value,
+          color: document.getElementById('input-away-color').value
+        }
+      };
+
+      const res = await fetch('/api/rosters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        const toast = document.getElementById('save-toast');
+        toast.classList.add('is-visible');
+        setTimeout(() => toast.classList.remove('is-visible'), 3200);
+      }
+    }
+
+    // Real-time listeners
+    socket.on('connect', () => {
+      document.getElementById('conn-status').textContent = 'Socket Conectado';
+    });
+
+    socket.on('disconnect', () => {
+      document.getElementById('conn-status').textContent = 'Reconectando...';
+    });
+
+    socket.on('matchState', (data) => {
+      syncUIFromData(data, false);
+    });
+
+    socket.on('stateChange', ({ matchData }) => {
+      syncUIFromData(matchData, false);
+    });
+
+    socket.on('scoreUpdate', ({ homeScore, awayScore }) => {
+      document.getElementById('ctrl-home-score').textContent = homeScore;
+      document.getElementById('ctrl-away-score').textContent = awayScore;
+    });
+
+    socket.on('periodUpdate', ({ period }) => {
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.classList.toggle('is-active', btn.dataset.period === period);
+      });
+    });
+
+    socket.on('rostersUpdated', ({ matchData }) => {
+      syncUIFromData(matchData, true);
+    });
+  </script>
+</body>
+</html>
